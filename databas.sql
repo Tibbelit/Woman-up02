@@ -6,14 +6,13 @@ create database woman-up;
 \c woman-up;
 
 create table user(
-    pnr int,
     first_name text,
     last_name text,
     tel_num int,
     password varchar(20) ,
     email text,
     
-    primary key (pnr)
+    primary key (email)
 );
 
 create table message(

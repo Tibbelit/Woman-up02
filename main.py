@@ -13,70 +13,67 @@ def server_static(filename):
     return static_file(filename, root=abs_static_path)
 
 
-@route("/startpage")
+@route('/startpage')
 def startpage():
-    return template("startpage")
+    return template('startpage')
 
 
-@get("/")
+@get('/')
 def login_page():
-       return template("index", msg="")
+       return template('index', msg="")
 
 
-@post("/")
+@post('/')
 def login():
     ''' Loginsidan'''
     msg = ""
    
-    email = getattr(request.forms, "email")
-    password = getattr(request.forms, "password")
-    conn = sqlite3.connect("woman-up.db")
+    email = getattr(request.forms, 'email')
+    password = getattr(request.forms, 'password')
+    conn = sqlite3.connect('woman-up.db')
     c = conn.cursor()
     #find_user = ("SELECT * FROM user WHERE email = ? and password = ?")
-    c.execute("SELECT * FROM user WHERE email = ? and password = ?",(email, password))
+    c.execute('SELECT * FROM user WHERE email = ? and password = ?',(email, password))
     if c.fetchone():
-        redirect("/startpage") 
+        redirect('/startpage') 
     else:
         msg = "Inkorrekt email eller lösenord"
 
-    return template("index", msg=msg)
+    return template('index', msg=msg)
 
-@get("/register")
+@get('/register')
 def register_page():
-        return template("register", msg="")
+        return template('register', msg="")
 
 
-@post("/register")
+@post('/register')
 def register():
     msg = ""
     found = 0
-    firstname = getattr(request.forms, "firstname")
-    lastname = getattr(request.forms, "lastname")
-    phonenumber = getattr(request.forms, "phonenumber")
-    password = getattr(request.forms, "password")
-    email = getattr(request.forms, "email")
-    conn = sqlite3.connect("woman-up.db")
+    firstname = getattr(request.forms, 'firstname')
+    lastname = getattr(request.forms, 'lastname')
+    phonenumber = getattr(request.forms, 'phonenumber')
+    password = getattr(request.forms, 'password')
+    email = getattr(request.forms, 'email')
+    conn = sqlite3.connect('woman-up.db')
     c = conn.cursor()
-    '''
-    while found == 0:
-        conn = sqlite3.connect("woman-up.db")
-        c = conn.cursor()
-        c.execute("SELECT * FROM user WHERE email = ?", (email,))
-        account = c.fetchall()
-        if account():
+  
+    while True:
+        c.execute('SELECT * FROM user WHERE email = ?', (email,))
+        if c.fetchone():
             msg = "Den email adressen är reddan registrerad"
         # elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             #msg = "Felaktig email adress"
-        elif not username or not password or not email:
+        elif not password or not email:
             msg = "Vänligen uppge all uppgifter"
         else:
-            found + 1 
-    '''
-    c.execute("INSERT INTO user VALUES(?,?,?,?,?)",(firstname, lastname, phonenumber, password, email))
-    conn.commit()
-    redirect("/")
+            break 
 
-    return template("register", msg=msg)
+    c.execute('INSERT INTO user VALUES(?,?,?,?,?)',(firstname, lastname, phonenumber, password, email))
+    conn.commit()
+    redirect('/')
+
+    return template('register', msg=msg)
 
 
 run(host='localhost', port=8080, debug=True, reloader=True)
