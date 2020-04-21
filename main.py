@@ -49,7 +49,6 @@ def register_page():
 @post('/register')
 def register():
     msg = ""
-    found = 0
     firstname = getattr(request.forms, 'firstname')
     lastname = getattr(request.forms, 'lastname')
     phonenumber = getattr(request.forms, 'phonenumber')
@@ -58,22 +57,22 @@ def register():
     conn = sqlite3.connect('woman-up.db')
     c = conn.cursor()
   
-    while True:
-        c.execute('SELECT * FROM user WHERE email = ?', (email,))
-        if c.fetchone():
-            msg = "Den email adressen är reddan registrerad"
-        # elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            #msg = "Felaktig email adress"
-        elif not password or not email:
-            msg = "Vänligen uppge all uppgifter"
-        else:
-            break 
+    c.execute('SELECT * FROM user WHERE email = ?', (email,))
+    if c.fetchone():
+         msg = "Den email adressen är reddan registrerad"
+    elif not password or not email:
+         msg = "Vänligen uppge all uppgifter"
+    else:
+        c.execute('INSERT INTO user VALUES(?,?,?,?,?)',(firstname, lastname, phonenumber, password, email))
+        conn.commit()
+        redirect('/update')
 
-    c.execute('INSERT INTO user VALUES(?,?,?,?,?)',(firstname, lastname, phonenumber, password, email))
-    conn.commit()
-    redirect('/')
 
     return template('register', msg=msg)
+    
 
+@route('/update')
+def new_user():
+    return template('update')
 
 run(host='localhost', port=8080, debug=True, reloader=True)

@@ -9,26 +9,36 @@
 html {
   height: 100%;
 }
-body {
-  min-height: 100%;
-  background-image: url(/static/logga.jpg);
-
+header{
+  min-height: 300px;
+  padding-top: 20px;
+  background-image: url(/static/test-logga.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  justify-content: center;
 }
-.box {
+
+body {
+  padding: 10px;
+  min-height: 100%;
+  background-image: linear-gradient(to left bottom, #e752d4, #de60d9, #d56bdd, #cc75e0, #c47ee1, #bc7adf, #b477de, #ac73dc, #a163d8, #9554d4, #8843cf, #7b32cb);
+}
+#login_box {
     box-sizing: border-box;
     max-width: 320px;
     box-shadow: 0 0 10px #333333;
     padding:10px;
     margin-top: 10%;
-    z-index: 2;
-    position: fixed;
-    margin-left: 37%;
-    background-color: white;
+    background-color: #F9F9F9;
 }
-#register_page {
-  margin: 0;
-  width: 100%;
-  height: 100%;
+
+#register_box {
+  box-sizing: border-box;
+  box-shadow: 0 0 10px #333333;
+  padding:10px;
+  margin-top: 10%;
+  background-color: #F9F9F9;
 }
 
 .form-check{
@@ -46,12 +56,12 @@ body {
     margin-left: 100px;
 }
 
-img{
+#logo{
     max-height: 550px;
     max-width: 550px;
     margin-left: 110px;
     z-index: 1;
-    position: fixed;
+    position: relative;
     margin-top:11%;
 
 }
@@ -72,11 +82,11 @@ img{
 }
 
 
-@media only screen and (max-width: 980px) {
+@media only screen and (max-width: 990px) {
     #chatt-box{
        
         min-width:100%; 
-        display: inline-block;}
+        display: block;}
     
     #profil-knapp{
         width: 40%;
@@ -84,6 +94,16 @@ img{
         margin-right: 30%;
 
     }
+    #login_box{
+      min-width:80%; 
+      display: inline-block;
+    }
+
+    #register_box{
+      min-width: 100%;
+      display: inline-block;
+    }
+
   }
 
 #UMO {
@@ -131,8 +151,7 @@ img{
         
     }
 
-    
-}
+  }
 
 /* CSS till startpage*/
 #Chatt, #Karta, #Nödrop{
@@ -141,6 +160,7 @@ img{
     text-align: center;
     font-size: 50px;
     box-shadow: 3px 2px rgb(199, 199, 199);
+    background-color: #F9F9F9;
 }
 
 a{
@@ -159,6 +179,7 @@ a{
     margin: 70px;
     text-align: center;
 }
+
 
 /*CSS till nödrops sidan*/
 #Rubrik{

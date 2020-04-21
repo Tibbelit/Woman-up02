@@ -12,9 +12,10 @@
     <title>Woman-Up</title>
 </head>
 
-<body id="register_page">
-    <div id="wrapper">
-        <form action="/register" method="POST" id="registering">
+<body>
+    <header></header>
+    <div class="container">
+        <form action="/register" method="POST" id="register_box">
             <h1>Skapa en profil</h1>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
@@ -115,13 +116,13 @@
                     </select>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="form-row align-items-center">
                 <div class="col-md-4 mb-3">
                     <label for="password">Lösenord</label>
                     <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelpBlock"
                         required>
                     <small id="passwordHelpBlock" class="form-text text-muted">
-                        Din lösenord måste vara mellan 8-20 karaktärer långt och innehålla båda bokstäver och siffror
+                        Ditt lösenord måste vara mellan 8-20 karaktärer långt.
                     </small>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -140,9 +141,6 @@
             <p>{{msg}}</p>
 
         </form>
-    <div id="bild">
-        <img src="/static/logga.jpg" alt="">
-    </div> 
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
