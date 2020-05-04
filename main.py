@@ -1,12 +1,27 @@
-from bottle import route, run, template, request, redirect, error, static_file, TEMPLATE_PATH, get, post
+import bottle
+from bottle import route, run, template, request, redirect, error, static_file, TEMPLATE_PATH, get, post, hook
 from datetime import datetime, date
 import sqlite3
+import Beaker
+from Beaker.middleware import SessionMiddleware
 import os
+
 abs_app_dir_path = os.path.dirname(os.path.realpath(__file__))
 abs_views_path = os.path.join(abs_app_dir_path, 'views')
 abs_static_path = os.path.join(abs_app_dir_path, 'static')
 TEMPLATE_PATH.insert(0, abs_views_path)
 
+session_opts = {
+    'session.type': 'database',
+    'session.data_dir': './data',
+    'session.cookie._expires': True,
+    'sessison.timeout': 1440,
+    'session.auto': True,
+}
+
+
+app = bottle.app()
+app = SessionMiddleware(app, session_opts)
 
 @route('/static/<filename>')
 def server_static(filename):
@@ -32,9 +47,11 @@ def login():
     password = getattr(request.forms, 'password')
     conn = sqlite3.connect('woman-up.db')
     c = conn.cursor()
-    #find_user = ("SELECT * FROM user WHERE email = ? and password = ?")
     c.execute('SELECT * FROM user WHERE email = ? and password = ?',(email, password))
-    if c.fetchone():
+    uid = c.fetchone()
+    if uid:
+        sess = request.environ.get('beaker.session')
+        sess['uid'] = uid
         redirect('/startpage') 
     else:
         msg = "Inkorrekt email eller lösenord"
