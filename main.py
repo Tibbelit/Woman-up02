@@ -1,7 +1,10 @@
 from bottle import route, run, template, request, redirect, error, static_file, TEMPLATE_PATH, get, post
 from datetime import datetime, date
 import sqlite3
+import bottle
+from bottle.ext import beaker
 import os
+
 abs_app_dir_path = os.path.dirname(os.path.realpath(__file__))
 abs_views_path = os.path.join(abs_app_dir_path, 'views')
 abs_static_path = os.path.join(abs_app_dir_path, 'static')
@@ -17,6 +20,7 @@ session_opts = {
 
 inloggad = "None"
 
+
 @route('/static/<filename>')
 def server_static(filename):
     return static_file(filename, root=abs_static_path)
@@ -24,8 +28,7 @@ def server_static(filename):
 
 @route("/startpage")
 def startpage():
-    email = request.query.get("email")
-    return template("startpage", email = email)
+    return template("startpage")
 
 
 @route("/", method=["POST", "GET"]) 
@@ -33,22 +36,22 @@ def login():
     global inloggad
     ''' Loginsidan'''
     msg = ""
-    if request.method == "POST":
-        email = getattr(request.forms, "email")
-        password = getattr(request.forms, "password")
-        conn = sqlite3.connect("woman-up.db")
-        c = conn.cursor()
-        #find_user = ("SELECT * FROM user WHERE email = ? and password = ?")
-        c.execute("SELECT * FROM user WHERE email = ? and password = ?",(email, password))
-        user = c.fetchone() 
-        if user:
-            inloggad = email
-            print(inloggad)
-            redirect("/startpage?email={}".format(user[4])) 
-        else:
-            msg = "Inkorrekt email eller lösenord"
+    email = getattr(request.forms, 'email')
+    password = getattr(request.forms, 'password')
+    conn = sqlite3.connect('woman-up.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM user WHERE email = ? and password = ?',(email, password))
+    user = c.fetchone()
+    if user:
+        c.execute('SELECT email FROM user WHERE email = ?', (email))
+        uid = c.fetchone
+        sess = request.environ.get('beaker.session')
+        sess['uid'] = uid
+        redirect('/startpage') 
+    else:
+        msg = "Inkorrekt email eller lösenord"
 
-    return template("index", msg=msg)
+    return template('index', msg=msg)
 
 
 @route('/register', method=["POST", "GET"])
@@ -87,6 +90,7 @@ def map():
     print(inloggad)
     conn = sqlite3.connect("woman-up.db")
     cursor= conn.cursor()
+    inloggad = "" ##den som är inloggad
     klart = ""
     if request.method == 'POST':
         print("Post")
@@ -114,17 +118,10 @@ def map():
 def emergency():
     return template('emergency')
 
-@route('/hamburgare')
-def hamburgare():
-    return template('hamburgare')
-
-@route('/PrivacyPolicy')
-def PrivacyPolicy():
-    return template('PrivacyPolicy')
 
 @route('/chatt')
 def chatt():
     return template('chatt')
 
 
-run(host='localhost', port=8082, debug=True, reloader=True)
+run(host='localhost', port=8083, debug=True, reloader=True)
