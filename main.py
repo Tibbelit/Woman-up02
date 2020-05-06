@@ -7,6 +7,14 @@ abs_views_path = os.path.join(abs_app_dir_path, 'views')
 abs_static_path = os.path.join(abs_app_dir_path, 'static')
 TEMPLATE_PATH.insert(0, abs_views_path)
 
+session_opts = {
+    'session.type': 'database',
+    'session.data_dir': 'woman-up.db',
+    'session.cookie._expires': True,
+    'sessison.timeout': 1440,
+    'session.auto': True,
+}
+
 inloggad = "None"
 
 @route('/static/<filename>')
