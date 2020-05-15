@@ -2,7 +2,7 @@ from bottle import route, run, template, request, redirect, error, static_file, 
 from datetime import datetime, date
 import sqlite3
 import bottle
-from bottle.ext import beaker
+import beaker.middleware
 import os
 
 abs_app_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -19,6 +19,7 @@ session_opts = {
 }
 
 app = beaker.middleware.SessionMiddleware(bottle.app(), session_opts)
+
 
 
 @route('/static/<filename>')
